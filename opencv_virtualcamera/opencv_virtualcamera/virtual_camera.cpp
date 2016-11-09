@@ -32,7 +32,7 @@ void init() {
 	k2 = paramlist[5];
 	p1 = paramlist[6];
 	p2 = paramlist[7];
-
+	/*
 	R[0][0] = sin(p);
 	R[0][1] = sin(t)*cos(p);
 	R[0][2] = cos(t)*cos(p);
@@ -41,6 +41,17 @@ void init() {
 	R[1][2] = cos(t)*sin(p);
 	R[2][0] = 0;
 	R[2][1] = -cos(t);
+	R[2][2] = sin(t);
+	*/
+
+	R[0][0] = cos(p);
+	R[0][1] = sin(p);
+	R[0][2] = 0;
+	R[1][0] = -sin(t)*sin(p);
+	R[1][1] = sin(t)*cos(p);
+	R[1][2] = -cos(t);
+	R[2][0] = -cos(t)*sin(p);
+	R[2][1] = cos(t)*cos(p);
 	R[2][2] = sin(t);
 
 	RT[0][0] = sin(p);
@@ -58,7 +69,7 @@ int main() {
 	init();
 	
 	X1 = 0;
-	Y1 = -5;
+	Y1 = -26;
 	Z1 = 1;
 
 	Xw = 0;
