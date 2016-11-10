@@ -15,7 +15,7 @@ float R[3][3] = { 0, }, RT[3][3] = { 0, };
 float X1 = 0, Y1 = 0, Z1 = 0;
 vector<Point2f>pos;
 Mat img = Mat::zeros(480, 680, CV_8UC3);
-Scalar color(255, 255, 255);
+Scalar color(0, 255, 0);
 int thickness = 1;
 
 void cal(float Xw, float Yw, float Zw) {
@@ -41,17 +41,7 @@ void cal(float Xw, float Yw, float Zw) {
 	R[2][0] = -cos(t)*sin(p);
 	R[2][1] = cos(t)*cos(p);
 	R[2][2] = sin(t);
-	/*
-	RT[0][0] = sin(p);
-	RT[0][1] = -cos(p);
-	RT[0][2] = 0;
-	RT[1][0] = sin(t)*cos(p);
-	RT[1][1] = sin(t)*sin(p);
-	RT[1][2] = -cos(t);
-	RT[2][0] = cos(t)*cos(p);
-	RT[2][1] = cos(t)*sin(p);
-	RT[2][2] = sin(t);
-	*/
+
 	float Xc = 0, Yc = 0, Zc = 0;
 	Xc = R[0][0] * (Xw - X1) + R[0][1] * (Yw - Y1) + R[0][2] * (Zw - Z1);
 	Yc = R[1][0] * (Xw - X1) + R[1][1] * (Yw - Y1) + R[1][2] * (Zw - Z1);
@@ -123,7 +113,7 @@ void init() {
 }
 
 void draw_disp() {
-	img = Mat::zeros(480, 680, CV_8UC3);
+	//img = Mat::zeros(480, 680, CV_8UC3);
 	//1¹ø Æò¸é
 	cal(0, 0, 0);
 	cal(7.5, 0, 0);
@@ -178,11 +168,26 @@ void draw_disp() {
 int main() {
 	init();
 	draw_disp();
+	cout << "Camera X1 = " << X1 << " Y1 = " << Y1 << " Z1 = " << Z1 << endl;
+	cout << endl;
 	cout << "Camera Control Key List" << endl;
+	cout << endl;
+	cout << "           I           " << endl;
+	cout << "         J K L         " << endl;
+	cout << "  shift : Y axis move  " << endl;
+	cout << "  control : tilt, pan  " << endl;
+
+	VideoCapture vc(0);
+	if (!vc.isOpened()) return 0;
 
 	while (1) {
-		imshow("img", img);
-		int keycode = waitKey(0);
+		img = Mat::zeros(480, 680, CV_8UC3);
+		vc >> img;
+		if (img.empty()) break;
+
+		draw_disp();
+		imshow("img", img);		
+		int keycode = waitKey(33);
 		//Z
 		if (keycode == 105) { //I
 			Z1 += 0.1;
@@ -231,27 +236,8 @@ int main() {
 		else if (keycode == 27) { //esc
 			break;
 		}
+		
 	}
-	destroyAllWindows();
-	/*
-	VideoCapture vc(0);
-	if (!vc.isOpened()) return 0;
-
-	Mat input;
-	while (1) {
-		vc >> input;
-		if (input.empty()) break;
-		int col = input.cols;
-		int row = input.rows;
-
-		Point center(col / 2, row / 2);
-		Scalar color(0, 0, 255);
-		circle(input, center, 5, color, CV_FILLED);
-
-		imshow("cam", input);
-		if (waitKey(33) == 27) break;
-	}
-	destroyAllWindows();
-	*/
+	cv::destroyAllWindows();
 	return 0;
 }
