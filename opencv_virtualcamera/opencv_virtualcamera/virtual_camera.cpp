@@ -10,7 +10,7 @@ using namespace std;
 float fx = 0.0, fy = 0.0, cx = 0.0, cy = 0.0,
 k1 = 0.0, k2 = 0.0, p1 = 0.0, p2 = 0.0;
 
-float p_degree = 0.0, t_degree = 0.0;
+float p_degree = -165.419986, t_degree = -21.221636;
 float R[3][3] = { 0, }, RT[3][3] = { 0, };
 float X1 = 0, Y1 = 0, Z1 = 0;
 vector<Point2f>pos;
@@ -84,9 +84,10 @@ void drawing_text(float Xw, float Yw, float Zw) {
 	v_d = (1 + k1*r2 + k2*r2*r2)*v + p1*(r2 + 2 * v*v) + 2 * p2*u*v;
 	x = u_d*fx + cx;
 	y = v_d*fy + cy;
-	String _x = format("%.1f", x);
-	String _y = format("%.1f", y);
-	String str = "(" + _x + "," + _y + ")";
+	string xw = format("%.1f", Xw);
+	string yw = format("%.1f", Yw);
+	string zw = format("%.1f", Zw);
+	String str = "(" + xw + ", " + yw + ", " + zw + ")";
 	putText(img, str, Point(x, y), FONT_HERSHEY_SIMPLEX, 0.5, color, thickness);
 }
 
@@ -97,6 +98,7 @@ void init() {
 	while (infile >> param) {
 		paramlist.push_back(param);
 	}
+	/*
 	fx = paramlist[0];
 	fy = paramlist[1];
 	cx = paramlist[2];
@@ -105,70 +107,81 @@ void init() {
 	k2 = paramlist[5];
 	p1 = paramlist[6];
 	p2 = paramlist[7];
+	*/
+	fx = 830.4154;
+	fy = 835.3609;
+	cx = 317.0694;
+	cy = 199.3031;
+	k1 = 0.09402;
+	k2 = -0.2823;
+	p1 = -0.0223;
+	p2 = -0.0053;
+
 
 	//카메라 원점
-	X1 = 0;
-	Y1 = -26;
-	Z1 = 1;
+	X1 = -1.599;
+	Y1 = 33.5264;
+	Z1 = 18.8057;
 }
 
 void draw_disp() {
 	//img = Mat::zeros(480, 680, CV_8UC3);
 	//1번 평면
 	cal(0, 0, 0);
-	cal(7.5, 0, 0);
-	cal(7.5, 7, 0);
-	cal(0, 7, 0);
+	cal(10, 0, 0);
+	cal(10, 8.5, 0);
+	cal(0, 8.5, 0);
 	drawing_plane();
 
 	//2번 평면
-	cal(0, 0, 3);
+	cal(0, 0, 3.3);
 	cal(0, 0, 0);
-	cal(7.5, 0, 0);
-	cal(7.5, 0, 3);
+	cal(10, 0, 0);
+	cal(10, 0, 3.3);
 	drawing_plane();
 
 	//3번 평면
 	cal(0, 0, 0);
-	cal(0, 7, 0);
-	cal(0, 7, 3);
-	cal(0, 0, 3);
+	cal(0, 8.5, 0);
+	cal(0, 8.5, 3.3);
+	cal(0, 0, 3.3);
 	drawing_plane();
 
 	//4번 평면
-	cal(0, 7, 3);
-	cal(0, 7, 0);
-	cal(7.5, 7, 0);
-	cal(7.5, 7, 3);
+	cal(0, 8.5, 3.3);
+	cal(0, 8.5, 0);
+	cal(10, 8.5, 0);
+	cal(10, 8.5, 3.3);
 	drawing_plane();
 
 	//5번 평면
-	cal(7.5, 0, 3);
-	cal(7.5, 0, 0);
-	cal(7.5, 7, 0);
-	cal(7.5, 7, 3);
+	cal(10, 0, 3.3);
+	cal(10, 0, 0);
+	cal(10, 8.5, 0);
+	cal(10, 8.5, 3.3);
 	drawing_plane();
 
 	//6번 평면
-	cal(0, 0, 3);
-	cal(7.5, 0, 3);
-	cal(7.5, 7, 3);
-	cal(0, 7, 3);
+	cal(0, 0, 3.3);
+	cal(10, 0, 3.3);
+	cal(10, 8.5, 3.3);
+	cal(0, 8.5, 3.3);
 	drawing_plane();
 
 	drawing_text(0, 0, 0);
-	drawing_text(7.5, 0, 0);
-	drawing_text(7.5, 7, 0);
-	drawing_text(7.5, 7, 3);
-	drawing_text(0, 7, 3);
-	drawing_text(0, 0, 3);
-	drawing_text(7.5, 0, 3);
+	drawing_text(10, 0, 0);
+	drawing_text(10, 8.5, 0);
+	drawing_text(10, 8.5, 3.3);
+	drawing_text(0, 8.5, 3.3);
+	drawing_text(0, 0, 3.3);
+	drawing_text(10, 0, 3.3);
 }
 
 int main() {
 	init();
 	draw_disp();
 	cout << "Camera X1 = " << X1 << " Y1 = " << Y1 << " Z1 = " << Z1 << endl;
+	cout << "Pan= " << p_degree << ", Tilt= " << t_degree << endl;
 	cout << endl;
 	cout << "Camera Control Key List" << endl;
 	cout << endl;
